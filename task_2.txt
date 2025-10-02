@@ -1,0 +1,25 @@
+cd code-user/
+touch hexlet.txt
+touch index.html
+echo "Hello, Hexlet!" >> hexlet.txt 
+echo "<h1>Мама, я коммичу</h1>" >> index.html 
+git add .
+git commit -m "init commit"
+
+
+--------------------------------Процесс выполнения----------------------------------------
+
+
+/usr/src/app$ ls
+code-teacher  code-user  hexlet.txt  index.html  Makefile  package.json  repos  tests
+/usr/src/app$ cd code-user/
+/usr/src/app/code-user$ touch hexlet.txt
+/usr/src/app/code-user$ echo "Hello, Hexlet!" >> hexlet.txt 
+/usr/src/app/code-user$ touch index.html
+/usr/src/app/code-user$ echo "<h1>Мама, я коммичу</h1>" >> index.html 
+/usr/src/app/code-user$ git add .
+/usr/src/app/code-user$ git commit -m "init commit"
+[main 33400ea] init commit
+ 2 files changed, 2 insertions(+)
+ create mode 100644 hexlet.txt
+ create mode 100644 index.html
