@@ -1,0 +1,17 @@
+cd code-user/
+git log --oneline
+git reset --hard HEAD~2
+
+
+--------------------------------Процесс выполнения----------------------------------------
+
+
+/usr/src/app$ cd code-user/
+/usr/src/app/code-user$ git log --oneline
+53c1c75 (HEAD -> main) fix index.html
+0dfb0da fix hexlet.txt
+50395fd add index.html
+4dc95e8 add hexlet.txt
+/usr/src/app/code-user$ git reset --hard HEAD~2
+HEAD is now at 50395fd add index.html
+/usr/src/app/code-user$ 
