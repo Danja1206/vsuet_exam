@@ -1,0 +1,49 @@
+
+git clone repos/git-user code-user
+cd code-user/
+echo "I like to change files" >> hexlet.txt 
+echo "<h1>С помощью Git можно писать книги</h1>" > index.html
+git add .
+git config --global user.email "student@vsuet.ru"
+git config --global user.name "Gitverse"
+git commit -m 'fix hexlet.txt and index.html'
+git push
+
+
+--------------------------------Процесс выполнения----------------------------------------
+
+
+/usr/src/app$ git clone repos/git-user code-user
+/usr/src/app$ ls
+code-teacher  code-user  Makefile  package.json  repos  __tests__
+/usr/src/app$ cd code-user/
+/usr/src/app/code-user$ ls
+hexlet.txt  index.html
+/usr/src/app/code-user$ echo "I like to change files" >> hexlet.txt 
+/usr/src/app/code-user$ echo "<h1>С помощью Git можно писать книги</h1>" > index.html
+/usr/src/app/code-user$ git commit -m "Изменены файлы: hexlet.txt, index.html"
+Author identity unknown
+
+*** Please tell me who you are.
+
+Run
+
+  git config --global user.email "you@example.com"
+  git config --global user.name "Your Name"
+
+to set your account's default identity.
+Omit --global to set the identity only in this repository.
+
+fatal: unable to auto-detect email address (got 'tirion@7032c5cd7d9f.(none)')
+/usr/src/app/code-user$ git config --global user.email "student@vsuet.ru"
+/usr/src/app/code-user$ git config --global user.name "Gitverse"
+/usr/src/app/code-user$ git commit -m "Изменены файлы: hexlet.txt, index.html"
+[main 4e0ce3c] Изменены файлы: hexlet.txt, index.html
+ 2 files changed, 2 insertions(+), 1 deletion(-)
+/usr/src/app/code-user$ git push 
+Enumerating objects: 7, done.
+Counting objects: 100% (7/7), done.
+Delta compression using up to 8 threads
+Compressing objects: 100% (3/3), done.
+Writing objects: 100% (4/4), 431 bytes | 431.00 KiB/s, done.
+Total 4 (delta 0), reused 0 (delta 0), pack-reused 0
