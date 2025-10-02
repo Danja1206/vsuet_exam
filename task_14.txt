@@ -1,0 +1,42 @@
+cd code-user/
+git stash
+echo "XYZ" > todo.md
+echo "stash не трогает новые файлы, которые еще не добавлены в индекс." >> hexlet.txt 
+git add hexlet.txt 
+git commit -m "Добавил строку в файл"
+git add .
+git commit -m "Добавил изменения"
+
+
+--------------------------------Процесс выполнения----------------------------------------
+
+
+/usr/src/app$ cd code-user/
+/usr/src/app/code-user$ git stash
+Saved working directory and index state WIP on main: 89d91f8 add index.html
+/usr/src/app/code-user$ echo "XYZ" > todo.md
+/usr/src/app/code-user$ echo "stash не трогает новые файлы, которые еще не добавлены в индекс." >> hexlet.txt 
+/usr/src/app/code-user$ git add hexlet.txt 
+/usr/src/app/code-user$ git commit -m "Добавил строку в файл"
+[main a9f157e] Добавил строку в файл
+ 1 file changed, 1 insertion(+)
+/usr/src/app/code-user$ git stash pop
+On branch main
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   index.html
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        quotes.txt
+        todo.md
+
+no changes added to commit (use "git add" and/or "git commit -a")
+Dropped refs/stash@{0} (a5b1f41f585014de49250276cd737b18007b8902)
+/usr/src/app/code-user$ git add .
+/usr/src/app/code-user$ git commit -m "Добавил изменения"
+[main 864566f] Добавил изменения
+ 3 files changed, 7 insertions(+)
+ create mode 100644 quotes.txt
+ create mode 100644 todo.md
