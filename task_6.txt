@@ -1,0 +1,36 @@
+cd code-user/
+git log --oneline
+git diff HEAD~1 HEAD
+nano hexlet2.txt
+git add hexlet2.txt
+git commit -m "Откатаны изменения в hexlet2.txt"
+
+
+--------------------------------Процесс выполнения----------------------------------------
+
+
+/usr/src/app$ cd code-user/
+/usr/src/app/code-user$ git log --oneline
+a83d69c (HEAD -> main) update hexlet2.txt
+0ac5139 update files
+e511117 add index.html
+aebb4a2 add hexlet.txt
+/usr/src/app/code-user$ git diff HEAD~1 HEAD
+diff --git a/hexlet2.txt b/hexlet2.txt
+index 43e2f65..264a802 100644
+--- a/hexlet2.txt
++++ b/hexlet2.txt
+@@ -1 +1 @@
+-Hello Hexlet!
++Hexlet Hello!
+/usr/src/app/code-user$ nano hexlet2.txt 
+/usr/src/app/code-user$ git add hexlet2.txt 
+/usr/src/app/code-user$ git commit -m "Откатаны изменения в hexlet2.txt"
+[main c3d9e58] Откатаны изменения в hexlet2.txt
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+/usr/src/app/code-user$ git log --oneline
+c3d9e58 (HEAD -> main) Откатаны изменения в hexlet2.txt
+a83d69c update hexlet2.txt
+0ac5139 update files
+e511117 add index.html
+aebb4a2 add hexlet.txt
