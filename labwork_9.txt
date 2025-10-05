@@ -1,0 +1,182 @@
+Задание 1. Исследуй текущее окружение Docker и определи, какое количество networks присутствует в системе.
+Выполнение:
+docker network ls
+Ответ:
+NETWORK ID     NAME      DRIVER    SCOPE
+3aaaa07533b9   bridge    bridge    local
+e4200b3afa5c   host      host      local
+a9f06edc6f67   none      null      local
+
+Задание 2. Какой ID соответствует мостовой сети (bridge network)?
+Выполнение:
+docker network ls
+Ответ:
+NETWORK ID     NAME      DRIVER    SCOPE
+3aaaa07533b9   bridge    bridge    local
+
+Задание 3. Мы только что создали контейнер с названием alpine-1. Определи к какой сети он присоединен.
+Выполнение:
+docker inspect alpine-1 | grep -A10 "Networks"
+Ответ:
+            "Networks": {
+                "host": {
+                    "IPAMConfig": null,
+                    "Links": null,
+                    "Aliases": null,
+                    "MacAddress": "",
+                    "NetworkID": "",
+                    "EndpointID": "",
+                    "Gateway": "",
+                    "IPAddress": "",
+                    "IPPrefixLen": 0,
+
+Задание 4. Запусти контейнер с названием alpine-2 с помощью образа alpine и прикрепи его к сети none.
+Сделай так, чтобы контейнер не останавливался после запуска.
+Выполнение:
+docker run -d --name alpine-2 --network none alpine sleep infinity
+docker ps -a
+Ответ:
+CONTAINER ID   IMAGE     COMMAND            CREATED         STATUS         PORTS     NAMES
+cbdc785eb58b   alpine    "sleep infinity"   5 seconds ago   Up 5 seconds             alpine-2
+
+Задание 5. Какие сетевые интерфейсы расположены внутри контейнера alpine-2, который подключен к сети none?
+Выполнение:
+docker exec alpine-2 ip addr show
+Ответ:
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00
+    inet 127.0.0.1/8 scope host lo
+       valid_lft forever preferred_lft forever
+    inet6 ::1/128 scope host 
+       valid_lft forever preferred_lft forever
+
+Задание 6. Какая подсеть сконфигурирована в сети bridge?
+Выполнение:
+docker network inspect bridge
+Ответ:
+[
+    {
+        "Name": "bridge",
+        "Id": "3aaaa07533b93df4705699d37abf1df492c65675d49ded28aad6da9be48fab2f",
+        "Created": "2025-10-04T21:25:44.383819545Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": null,
+            "Config": [
+                {
+                    "Subnet": "172.12.0.0/24",
+                    "Gateway": "172.12.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {
+            "com.docker.network.bridge.default_bridge": "true",
+            "com.docker.network.bridge.enable_icc": "true",
+            "com.docker.network.bridge.enable_ip_masquerade": "true",
+            "com.docker.network.bridge.host_binding_ipv4": "0.0.0.0",
+            "com.docker.network.bridge.name": "docker0",
+            "com.docker.network.driver.mtu": "1500"
+        },
+        "Labels": {}
+    }
+]
+
+Задание 7. Создай новую сеть с названием wp-mysql-network, которая будет использовать сетевой драйвер bridge. Назначь ей 172.22.0.0/24 подсеть. Настрой Gateway 172.22.0.1.
+Выполнение:
+docker network create \
+  --driver bridge \
+  --subnet 172.22.0.0/24 \
+  --gateway 172.22.0.1 \
+  wp-mysql-network
+docker network inspect wp-mysql-network
+Ответ:
+[
+    {
+        "Name": "wp-mysql-network",
+        "Id": "882e7a654299cba66b342a93b74b40764e0e0fbddc6ca1905431dd5c0c674342",
+        "Created": "2025-10-04T23:29:38.289213437Z",
+        "Scope": "local",
+        "Driver": "bridge",
+        "EnableIPv6": false,
+        "IPAM": {
+            "Driver": "default",
+            "Options": {},
+            "Config": [
+                {
+                    "Subnet": "172.22.0.0/24",
+                    "Gateway": "172.22.0.1"
+                }
+            ]
+        },
+        "Internal": false,
+        "Attachable": false,
+        "Ingress": false,
+        "ConfigFrom": {
+            "Network": ""
+        },
+        "ConfigOnly": false,
+        "Containers": {},
+        "Options": {},
+        "Labels": {}
+    }
+]
+
+Задание 8. Разверни базу mysql с помощью образа mysql. Контейнер должен называться mysql-db. Прикрепи его к только что созданной сети wp-mysql-network.
+Установи пароль для использования базы данных db_pass123. Переменная окружения, ответственная за это MYSQL_ROOT_PASSWORD.
+Выполнение:
+docker run -d \
+  --name mysql-db \
+  --network wp-mysql-network \
+  -e MYSQL_ROOT_PASSWORD=db_pass123 \
+  mysql
+Ответ:
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                 NAMES
+c1476ad67099   mysql     "docker-entrypoint.s…"   20 seconds ago   Up 19 seconds   3306/tcp, 33060/tcp   mysql-db
+
+docker exec -it mysql-db mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 9
+
+Задание 9. Разверни веб-приложение с названием webapp, используй образ rotorocloud/webapp-mysql. Опубликуй его на порту 30080 хоста.
+Приложение использует две переменные окружения:
+1: DB_Host со значением mysql-db.
+2: DB_Password со значением db_pass123.
+Убедись, что прикрепил вновь созданную сеть wp-mysql-network.
+Выполнение:
+docker run -d \
+  --name webapp \
+  --network wp-mysql-network \
+  -p 30080:80 \
+  -e DB_Host=mysql-db \
+  -e DB_Password=db_pass123 \
+  rotorocloud/webapp-mysql
+Ответ:
+root@controlplane ✗ docker ps
+CONTAINER ID   IMAGE                      COMMAND                  CREATED              STATUS              PORTS                                               NAMES
+e1030dc4b7ab   rotorocloud/webapp-mysql   "/bin/sh -c 'python …"   About a minute ago   Up About a minute   8080/tcp, 0.0.0.0:30080->80/tcp, :::30080->80/tcp   webapp
+
+root@controlplane ✗ docker logs webapp
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: This is a development server. Do not use it in a production deployment.
+   Use a production WSGI server instead.
+ * Debug mode: off
+ * Running on http://0.0.0.0:8080/ (Press CTRL+C to quit)
+
+Задание 10. Если ты все сделал правильно, ты увидишь работу приложения нажав на значок приложения над своими вопросами. Там будет сообщение, что ракета взлетела.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
