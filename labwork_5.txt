@@ -1,0 +1,37 @@
+Задание 1. Мы представили Dockerfiles нескольких популярных продуктов в каталоге /root/ (твоей текущей директории). Изучи их и ответь на несколько вопросов.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 2. Какая ENTRYPOINT установлена для создания образа nosql базы данных?
+Выполнение:
+cat Dockerfile-mongodb 
+Ответ: ENTRYPOINT не установлен.
+
+Задание 3. Какая ENTRYPOINT установлена для создания образа реляционной базы данных, коммюнити версии mysql?
+Выполнение:
+cat Dockerfile-mariadb
+Ответ: ENTRYPOINT ["docker-entrypoint.sh"]
+
+Задание 4. Какая CMD установлена для создания образа системы управления контентом wordpress?
+Выполнение:
+cat Dockerfile-wordpress
+Ответ: CMD ["apache2-foreground"]
+
+Задание 5. Какой будет окончательная команда при запуске контейнера из образа wordpress из данного Dockerfile? Прими во внимание и инструкцию ENTRYPOINT, и инструкцию CMD
+Выполнение:
+cat Dockerfile-wordpress
+Ответ: docker-entrypoint.sh apache2-foreground
+
+Задание 6. Какая команда выполняется при запуске контейнера, созданного из Dockerfile с названием ubuntu?
+Выполнение:
+cat Dockerfile-ubuntu
+Ответ: CMD ["bash"]
+
+Задание 7. Запусти контейнер из образа ubuntu и переопредели команду (CMD) для старта в контейнере, заменив ее на sleep 1000. Запусти это в detached mode.
+Выполнение:
+docker run -d ubuntu sleep 1000
+Ответ:
+CONTAINER ID   IMAGE     COMMAND        CREATED         STATUS         PORTS     NAMES
+a4cc475fc002   ubuntu    "sleep 1000"   3 minutes ago   Up 3 minutes             flamboyant_boyd
