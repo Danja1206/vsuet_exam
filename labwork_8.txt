@@ -1,0 +1,166 @@
+Задание 1. В каком месте хранятся файлы, связанные с docker-контейнерами и docker-образами?
+Выполнение:
+Отсутствует. Тестовый вопрос.
+Ответ:
+/var/lib/docker.
+
+Задание 2. В какой директории внутри /var/lib/docker хранятся файлы, связанные с контейнером alpine-3?
+Выполнение:
+docker ps -a
+Ответ:
+CONTAINER ID   IMAGE     COMMAND     CREATED         STATUS                     PORTS     NAMES
+4a2f5bf4461d   alpine    "/bin/sh"   3 minutes ago   Exited (0) 3 minutes ago             alpine-3
+
+Задание 3. Запусти контейнер с mysql и дай ему имя mysql-db (используй образ mysql). Установи ROOT-пароль к базе данных в db_pass123
+Внимание: Запусти это в detached mode.
+Выполнение:
+docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=db_pass123 mysql
+docker ps
+Ответ:
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                 NAMES
+83c5cd698d01   mysql     "docker-entrypoint.s…"   19 seconds ago   Up 18 seconds   3306/tcp, 33060/tcp   mysql-db
+
+Задание 4. Мы только что записали данные в базу mysql. Чтобы просмотреть содержимое воспользуйся скриптом get-data.sh, он доступен в директории /root. Сколько записей об авторах присутствует в базе?
+Запусти: sh get-data.sh
+Выполнение:
+sh /root/get-data.sh
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
+id      first_name      last_name       email   birthdate       added
+1       Olin    Schultz nestor.heaney@example.com       1975-08-30      1995-05-20 08:50:58
+2       Jamal   Batz    eliane.hagenes@example.org      2007-11-21      2013-01-02 08:22:25
+3       Brendan Morissette      ned.cronin@example.org  1991-12-25      1996-10-15 07:37:40
+4       Jason   Harris  simonis.domenica@example.com    1985-04-21      1971-11-12 22:32:12
+5       Lurline Schoen  cesar.flatley@example.net       1980-02-13      2005-02-25 12:35:59
+6       Xzavier Rau     sarina22@example.org    2003-03-10      1987-05-31 02:51:23
+7       Akeem   Herzog  ruth60@example.net      1995-10-15      1996-06-08 23:12:25
+8       Breana  Grady   ray91@example.org       2019-07-10      2005-10-10 06:58:26
+9       Dario   Graham  eebert@example.org      1992-03-20      1973-07-04 11:24:20
+10      Tressa  Bruen   kasandra.schiller@example.com   1988-10-08      2004-11-18 15:08:13
+11      Magnus  Waters  kallie68@example.net    1978-12-18      2000-07-08 20:38:11
+12      Buster  Simonis hpurdy@example.net      1975-05-06      1974-09-30 08:33:50
+13      Vivienne        Bartoletti      huel.adah@example.org   2004-05-22      1987-02-08 19:48:31
+14      Lonie   Mertz   fadel.kennedi@example.net       2017-12-21      2000-08-07 04:34:32
+15      Mercedes        Medhurst        mrunte@example.net      1997-05-06      1991-07-05 20:08:02
+16      Carleton        Macejkovic      gleason.garrison@example.net    1993-07-14      1995-12-29 14:04:11
+17      Eldon   Feest   xfeil@example.com       1984-04-03      2006-12-02 16:35:52
+18      Eriberto        Jacobi  zbotsford@example.net   1987-10-03      2012-05-12 22:50:48
+19      Mohammed        Strosin ozella.hartmann@example.com     1999-11-25      2007-06-07 10:10:50
+20      Adam    Grimes  carmine30@example.com   1994-02-07      1978-11-17 01:14:07
+21      Jacquelyn       Anderson        markus06@example.net    1976-06-03      1971-10-30 17:24:58
+22      Bonnie  Gaylord stokes.cara@example.com 1992-11-07      2009-11-04 01:11:14
+23      Rowena  Padberg zrunolfsson@example.org 2015-12-12      2008-07-25 04:30:49
+24      Miles   Gulgowski       sdicki@example.net      1991-10-13      2005-02-24 12:30:10
+25      Chris   Fadel   romaguera.ashleigh@example.net  1991-02-24      2017-10-10 21:25:52
+26      Kamren  Stroman lilly57@example.net     2000-02-13      1978-04-21 02:29:20
+27      Libbie  Hoeger  maybell38@example.com   1977-05-17      1988-08-14 00:03:12
+28      Harmony Turner  schmeler.tracy@example.net      1981-07-13      2005-10-02 02:40:28
+29      Jorge   Murray  tcarroll@example.com    1976-09-07      1998-09-21 06:14:11
+30      Savanna Pagac   balistreri.caden@example.com    2006-03-28      1979-10-16 15:01:43
+
+Задание 5. База данных сломалась. Ты можешь просмотреть данные сейчас?
+Попробуй посмотреть данные той же командой. Попробуй найти контейнер.
+Выполнение:
+sh /root/get-data.sh
+Ответ:
+Error response from daemon: No such container: mysql-db
+
+Задание 6. Ой! Мы не планировали такого. Придется начинать заново!
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 7. Запусти mysql-контейнер снова, но в этот раз подключи том (volume) к контейнеру. В томе данные будут на постоянном хранении по размещению /opt/data на хосте.
+Используй тоже самое имя: mysql-db и тот же пароль: db_pass123, как и ранее. Mysql хранит данные в /var/lib/mysql внутри контейнера.
+Выполнение:
+docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=db_pass123 -v /opt/data:/var/lib/mysql mysql
+docker ps
+Ответ:
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                 NAMES
+5c4a971584ff   mysql     "docker-entrypoint.s…"   43 seconds ago   Up 42 seconds   3306/tcp, 33060/tcp   mysql-db
+
+Задание 8. Мы только что снова записали данные в базу. Запусти скрипт get-data.sh, чтобы убедиться, что они на месте.
+Запусти: sh get-data.sh
+Выполнение:
+sh /root/get-data.sh
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
+id      first_name      last_name       email   birthdate       added
+1       Olin    Schultz nestor.heaney@example.com       1975-08-30      1995-05-20 08:50:58
+2       Jamal   Batz    eliane.hagenes@example.org      2007-11-21      2013-01-02 08:22:25
+3       Brendan Morissette      ned.cronin@example.org  1991-12-25      1996-10-15 07:37:40
+4       Jason   Harris  simonis.domenica@example.com    1985-04-21      1971-11-12 22:32:12
+5       Lurline Schoen  cesar.flatley@example.net       1980-02-13      2005-02-25 12:35:59
+6       Xzavier Rau     sarina22@example.org    2003-03-10      1987-05-31 02:51:23
+7       Akeem   Herzog  ruth60@example.net      1995-10-15      1996-06-08 23:12:25
+8       Breana  Grady   ray91@example.org       2019-07-10      2005-10-10 06:58:26
+9       Dario   Graham  eebert@example.org      1992-03-20      1973-07-04 11:24:20
+10      Tressa  Bruen   kasandra.schiller@example.com   1988-10-08      2004-11-18 15:08:13
+11      Magnus  Waters  kallie68@example.net    1978-12-18      2000-07-08 20:38:11
+12      Buster  Simonis hpurdy@example.net      1975-05-06      1974-09-30 08:33:50
+13      Vivienne        Bartoletti      huel.adah@example.org   2004-05-22      1987-02-08 19:48:31
+14      Lonie   Mertz   fadel.kennedi@example.net       2017-12-21      2000-08-07 04:34:32
+15      Mercedes        Medhurst        mrunte@example.net      1997-05-06      1991-07-05 20:08:02
+16      Carleton        Macejkovic      gleason.garrison@example.net    1993-07-14      1995-12-29 14:04:11
+17      Eldon   Feest   xfeil@example.com       1984-04-03      2006-12-02 16:35:52
+18      Eriberto        Jacobi  zbotsford@example.net   1987-10-03      2012-05-12 22:50:48
+19      Mohammed        Strosin ozella.hartmann@example.com     1999-11-25      2007-06-07 10:10:50
+20      Adam    Grimes  carmine30@example.com   1994-02-07      1978-11-17 01:14:07
+21      Jacquelyn       Anderson        markus06@example.net    1976-06-03      1971-10-30 17:24:58
+22      Bonnie  Gaylord stokes.cara@example.com 1992-11-07      2009-11-04 01:11:14
+23      Rowena  Padberg zrunolfsson@example.org 2015-12-12      2008-07-25 04:30:49
+24      Miles   Gulgowski       sdicki@example.net      1991-10-13      2005-02-24 12:30:10
+25      Chris   Fadel   romaguera.ashleigh@example.net  1991-02-24      2017-10-10 21:25:52
+26      Kamren  Stroman lilly57@example.net     2000-02-13      1978-04-21 02:29:20
+27      Libbie  Hoeger  maybell38@example.com   1977-05-17      1988-08-14 00:03:12
+28      Harmony Turner  schmeler.tracy@example.net      1981-07-13      2005-10-02 02:40:28
+29      Jorge   Murray  tcarroll@example.com    1976-09-07      1998-09-21 06:14:11
+30      Savanna Pagac   balistreri.caden@example.com    2006-03-28      1979-10-16 15:01:43
+
+Задание 9. У нас снова падение! Все контейнеры снова уничтожены. Но теперь все наши данные хранятся в директории /opt/data. Разверни БД в новом экземпляре mysql, используя те же параметры.
+Просто запусти предыдущую команду для запуска контейнера. Можешь взять ее отсюда: docker run -v /opt/data:/var/lib/mysql -d --name mysql-db -e MYSQL_ROOT_PASSWORD=db_pass123 mysql
+Выполнение:
+docker run -v /opt/data:/var/lib/mysql -d --name mysql-db -e MYSQL_ROOT_PASSWORD=db_pass123 mysql
+docker ps
+Ответ:
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS                 NAMES
+06c738ba0391   mysql     "docker-entrypoint.s…"   27 seconds ago   Up 26 seconds   3306/tcp, 33060/tcp   mysql-db
+
+Задание 10. Сравни данные и убедись, что все на месте.
+Запусти: sh get-data.sh
+Выполнение:
+sh /root/get-data.sh
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
+id      first_name      last_name       email   birthdate       added
+1       Olin    Schultz nestor.heaney@example.com       1975-08-30      1995-05-20 08:50:58
+2       Jamal   Batz    eliane.hagenes@example.org      2007-11-21      2013-01-02 08:22:25
+3       Brendan Morissette      ned.cronin@example.org  1991-12-25      1996-10-15 07:37:40
+4       Jason   Harris  simonis.domenica@example.com    1985-04-21      1971-11-12 22:32:12
+5       Lurline Schoen  cesar.flatley@example.net       1980-02-13      2005-02-25 12:35:59
+6       Xzavier Rau     sarina22@example.org    2003-03-10      1987-05-31 02:51:23
+7       Akeem   Herzog  ruth60@example.net      1995-10-15      1996-06-08 23:12:25
+8       Breana  Grady   ray91@example.org       2019-07-10      2005-10-10 06:58:26
+9       Dario   Graham  eebert@example.org      1992-03-20      1973-07-04 11:24:20
+10      Tressa  Bruen   kasandra.schiller@example.com   1988-10-08      2004-11-18 15:08:13
+11      Magnus  Waters  kallie68@example.net    1978-12-18      2000-07-08 20:38:11
+12      Buster  Simonis hpurdy@example.net      1975-05-06      1974-09-30 08:33:50
+13      Vivienne        Bartoletti      huel.adah@example.org   2004-05-22      1987-02-08 19:48:31
+14      Lonie   Mertz   fadel.kennedi@example.net       2017-12-21      2000-08-07 04:34:32
+15      Mercedes        Medhurst        mrunte@example.net      1997-05-06      1991-07-05 20:08:02
+16      Carleton        Macejkovic      gleason.garrison@example.net    1993-07-14      1995-12-29 14:04:11
+17      Eldon   Feest   xfeil@example.com       1984-04-03      2006-12-02 16:35:52
+18      Eriberto        Jacobi  zbotsford@example.net   1987-10-03      2012-05-12 22:50:48
+19      Mohammed        Strosin ozella.hartmann@example.com     1999-11-25      2007-06-07 10:10:50
+20      Adam    Grimes  carmine30@example.com   1994-02-07      1978-11-17 01:14:07
+21      Jacquelyn       Anderson        markus06@example.net    1976-06-03      1971-10-30 17:24:58
+22      Bonnie  Gaylord stokes.cara@example.com 1992-11-07      2009-11-04 01:11:14
+23      Rowena  Padberg zrunolfsson@example.org 2015-12-12      2008-07-25 04:30:49
+24      Miles   Gulgowski       sdicki@example.net      1991-10-13      2005-02-24 12:30:10
+25      Chris   Fadel   romaguera.ashleigh@example.net  1991-02-24      2017-10-10 21:25:52
+26      Kamren  Stroman lilly57@example.net     2000-02-13      1978-04-21 02:29:20
+27      Libbie  Hoeger  maybell38@example.com   1977-05-17      1988-08-14 00:03:12
+28      Harmony Turner  schmeler.tracy@example.net      1981-07-13      2005-10-02 02:40:28
+29      Jorge   Murray  tcarroll@example.com    1976-09-07      1998-09-21 06:14:11
+30      Savanna Pagac   balistreri.caden@example.com    2006-03-28      1979-10-16 15:01:43
