@@ -1,0 +1,99 @@
+Задание 1. Сначала создай контейнер с базой данных redis с названием redis и образом redis.
+Выполнение:
+docker run -d --name redis redis
+Ответ:
+CONTAINER ID   IMAGE     COMMAND                  CREATED          STATUS          PORTS      NAMES
+677cc70d351c   redis     "docker-entrypoint.s…"   18 seconds ago   Up 17 seconds   6379/tcp   redis
+
+Задание 2. Далее, создай контейнер rocketcounter из образа rotorocloud/rocket-counter, задай связь с приложением redis при помощи механизма link и после выставь его на порт 8085 хоста. Приложение rocketcounter работает на порту 5000 в контейнере.
+Выполнение:
+docker run -d --name rocketcounter --link redis:redis -p 8085:5000 rotorocloud/rocket-counter
+Ответ:
+CONTAINER ID   IMAGE                        COMMAND                  CREATED         STATUS         PORTS                                       NAMES
+4a59481783b4   rotorocloud/rocket-counter   "flask run"              6 seconds ago   Up 5 seconds   0.0.0.0:8085->5000/tcp, :::8085->5000/tcp   rocketcounter
+
+Задание 3. Теперь ты можешь получить доступ к приложению используя ссылку Rocket-Counter над вопросами. Нажимай кнопку GET A ROCKET, чтобы увеличить значение счетчика.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 4. Мы вручную собрали работающее приложение. Теперь давай приберём за собой. Удали контейнеры redis и rocketcounter.
+Выполнение:
+docker rm -f redis rocketcounter
+Ответ:
+CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+
+Задание 5. Мы вручную собрали работающее приложение. Теперь давай приберём за собой. Удали контейнеры redis и rocketcounter.
+Выполнение:
+cd rocketcounter
+cat > docker-compose.yml << 'EOF'
+version: "3.8"
+services:
+  redis:
+    image: redis
+    
+  rocketcounter:
+    image: rotorocloud/rocket-counter
+    ports:
+      - "8085:5000"
+    depends_on:
+      - redis
+EOF
+docker-compose up -d
+Ответ:
+root@controlplane ✗ 
+WARN[0000] /root/rocketcounter/docker-compose.yml: `version` is obsolete 
+[+] Running 3/3
+ ✔ Network rocketcounter_default            Created                                                                                                                             0.1s 
+ ✔ Container rocketcounter-redis-1          Started                                                                                                                             0.7s 
+ ✔ Container rocketcounter-rocketcounter-1  Started                                                                                                                             1.2s 
+
+~/rocketcounter 
+root@controlplane ▶ docker ps -a
+CONTAINER ID   IMAGE                        COMMAND                  CREATED          STATUS          PORTS                                       NAMES
+3172ca71bc70   rotorocloud/rocket-counter   "flask run"              15 seconds ago   Up 14 seconds   0.0.0.0:8085->5000/tcp, :::8085->5000/tcp   rocketcounter-rocketcounter-1
+5a6233f21be3   redis                        "docker-entrypoint.s…"   16 seconds ago   Up 15 seconds   6379/tcp                                    rocketcounter-redis-1
+
+Задание 6. Мы что-то поменяли, сколько реплик контейнеров в службе rocketcounter?
+Выполнение: 
+docker-compose ps rocketcounter
+Ответ:
+WARN[0000] /root/rocketcounter/docker-compose.yml: `version` is obsolete 
+NAME      IMAGE     COMMAND   SERVICE   CREATED   STATUS    PORTS
+
+Задание 7. Увеличь количество реплик rocketcounter до 2. Пользуйся средствами docker-compose
+Выполнение: 
+docker-compose up -d --scale rocketcounter=2
+Ответ:
+WARN[0000] /root/rocketcounter/docker-compose.yml: `version` is obsolete 
+[+] Running 3/3
+ ✔ Container rocketcounter-redis-1          Running                                                                                                                             0.0s 
+ ✔ Container rocketcounter-rocketcounter-2  Started                                                                                                                             1.9s 
+ ✔ Container rocketcounter-rocketcounter-1  Started                                                                                                                             0.7s 
+
+~/rocketcounter took 2s 
+root@controlplane ▶ docker-compose ps rocketcounter
+WARN[0000] /root/rocketcounter/docker-compose.yml: `version` is obsolete 
+NAME                            IMAGE                        COMMAND       SERVICE         CREATED          STATUS          PORTS
+rocketcounter-rocketcounter-1   rotorocloud/rocket-counter   "flask run"   rocketcounter   17 seconds ago   Up 16 seconds   0.0.0.0:8085->5000/tcp, :::8085->5000/tcp
+rocketcounter-rocketcounter-2   rotorocloud/rocket-counter   "flask run"   rocketcounter   17 seconds ago   Up 15 seconds   0.0.0.0:8086->5000/tcp, :::8086->5000/tcp
+
+Задание 8. Теперь у нас 2 реплики приложения, работающие с одной базой. Ты можешь получить доступ к ним используя ссылки над вопросами. Если ты нажмешь кнопку GET A ROCKET по очереди в каждом приложении, ты увидишь, что значение счетчика общее для всех копий.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 9. Полностью удали стек docker-compose. Убедись, что Docker Compose корректно уничтожил все контейнеры и сети.
+Выполнение:
+cd /root/rocketcounter && docker-compose down
+Ответ:
+WARN[0000] /root/rocketcounter/docker-compose.yml: `version` is obsolete 
+[+] Running 4/4
+ ✔ Container rocketcounter-redis-1          Removed                                                                                                                             0.4s 
+ ✔ Container rocketcounter-rocketcounter-2  Removed                                                                                                                            10.5s 
+ ✔ Container rocketcounter-rocketcounter-1  Removed                                                                                                                            10.5s 
+ ✔ Network rocketcounter_default            Removed                                                                                                                             0.2s 
+
+~/rocketcounter took 10s 
