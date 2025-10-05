@@ -1,0 +1,84 @@
+Задание 1. Мы представили Dockerfiles нескольких популярных продуктов в каталоге /root/ (твоей текущей директории). Изучи их и ответь на несколько вопросов.
+Выполнение:
+docker ps
+docker exec nice_poitras env | grep ROCKET_SIZE
+Ответ:
+ROCKET_SIZE=average
+
+Задание 2. Запусти контейнер с именем rocket-app из образа rotorocloud/simple-webapp-rockets и установи переменную ROCKET_SIZE в значение big. Сделай приложение доступным на порту 30888 докер-хоста. Приложение в контейнере работает на 8080 порту.
+Выполнение:
+docker run -d --name rocket-app -e ROCKET_SIZE=big -p 30888:8080 rotorocloud/simple-webapp-rockets
+docker ps
+docker exec rocket-app env | grep ROCKET_SIZE
+Ответ:
+CONTAINER ID   IMAGE                               COMMAND            CREATED          STATUS          PORTS                                         NAMES
+9b56f154b2a0   rotorocloud/simple-webapp-rockets   "python3 app.py"   18 seconds ago   Up 18 seconds   0.0.0.0:30888->8080/tcp, :::30888->8080/tcp   rocket-app
+ROCKET_SIZE=big
+
+Задание 3. Посмотри на работу приложения, используя ссылку над вопросами, и убедись, что программа показывает верный размер ракеты.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 4. Разверни экземпляр базы mysql с помощью образа mysql и назови контейнер mysql-db.
+Для базы этого контейнера установи пароль db_pass123. Ты можешь посмотреть правильный образ mysql на Docker Hub и там же узнать, как правильно проинициализировать root-пароль для ее контейнеризированной версии.
+Выполнение:
+docker run -d --name mysql-db -e MYSQL_ROOT_PASSWORD=db_pass123 mysql
+docker ps
+Ответ:
+CONTAINER ID   IMAGE                               COMMAND                  CREATED          STATUS          PORTS                                         NAMES
+b1829a33eb6e   mysql                               "docker-entrypoint.s…"   11 seconds ago   Up 10 seconds   3306/tcp, 33060/tcp                           mysql-db
+
+Задание 5. Узнай, сколько баз данных создано в контейнере с mysql.
+База может подниматься около минуты. Убедись, что ты получил данные из базы, а не угадал вариант.
+Выполнение:
+docker exec -it mysql-db mysql -u root -pdb_pass123 -e "SHOW DATABASES;"
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+Задание 6. Как видишь, без знания установленного пароля, база данных не дает совершать с собой никаких действий.
+При помощи переменных окружения инициализируются большинство контейнеризированных приложений.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 7. Попробуй cнова обратиться к базе и посмотри текущее значение переменной окружения MYSQL_ROOT_PASSWORD.
+ИНФО: Мы что-то изменили, детально исследуй контейнер
+Выполнение:
+docker exec -it mysql-db mysql -u root -pdb_pass123 -e "SHOW DATABASES;"
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
+ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: YES)
+
+Задание 8. Все верно, мы поменяли пароль в базе, но переменная осталась прежняя. Снова узнай, сколько баз данных создано в контейнере с mysql.
+ИНФО: Новый пароль db_newpass123.
+Выполнение:
+docker exec -it mysql-db mysql -u root -pdb_newpass123 -e "SHOW DATABASES;"
+Ответ:
+mysql: [Warning] Using a password on the command line interface can be insecure.
++--------------------+
+| Database           |
++--------------------+
+| ROTORO             |
+| WAS_HERE           |
+| information_schema |
+| mysql              |
+| performance_schema |
+| sys                |
++--------------------+
+
+Задание 6. Как ты убедился, переменные окружения не всегда отражают текущее положение дел. Очень часто (но не всегда) они используются для первоначальной инициализации переменных в контейнере, а дальше контейнер живет своей жизнью.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
