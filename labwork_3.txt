@@ -1,0 +1,221 @@
+Задание 1. Сколько images доступно на докер-хосте?
+Выполнение:
+docker images
+Ответ:
+REPOSITORY                          TAG       IMAGE ID       CREATED        SIZE
+mysql                               latest    245a6c909dc0   2 months ago   921MB
+alpine                              latest    9234e8fb04c4   2 months ago   8.31MB
+nginx                               latest    2cd1d97f893f   2 months ago   192MB
+ubuntu                              latest    65ae7a6f3544   2 months ago   78.1MB
+redis                               latest    0378d73bea8b   3 months ago   128MB
+nginx                               alpine    d6adbc7fd47e   3 months ago   52.4MB
+postgres                            latest    8663c6099632   4 months ago   438MB
+rotorocloud/webapp-mysql            latest    8f183a7f22c7   4 years ago    56.6MB
+rotorocloud/simple-webapp-rockets   latest    c8ce52347f19   4 years ago    52.6MB
+
+Задание 2. Какой размер образа ubuntu?
+Выполнение:
+docker images
+Ответ:
+REPOSITORY                          TAG       IMAGE ID       CREATED        SIZE
+mysql                               latest    245a6c909dc0   2 months ago   921MB
+alpine                              latest    9234e8fb04c4   2 months ago   8.31MB
+nginx                               latest    2cd1d97f893f   2 months ago   192MB
+ubuntu                              latest    65ae7a6f3544   2 months ago   78.1MB
+redis                               latest    0378d73bea8b   3 months ago   128MB
+nginx                               alpine    d6adbc7fd47e   3 months ago   52.4MB
+postgres                            latest    8663c6099632   4 months ago   438MB
+rotorocloud/webapp-mysql            latest    8f183a7f22c7   4 years ago    56.6MB
+rotorocloud/simple-webapp-rockets   latest    c8ce52347f19   4 years ago    52.6MB
+
+Задание 3. Какой размер образа ubuntu?
+Выполнение:
+docker images
+Ответ:
+REPOSITORY                          TAG           IMAGE ID       CREATED        SIZE
+mysql                               latest        245a6c909dc0   2 months ago   921MB
+alpine                              latest        9234e8fb04c4   2 months ago   8.31MB
+nginx                               latest        2cd1d97f893f   2 months ago   192MB
+ubuntu                              latest        65ae7a6f3544   2 months ago   78.1MB
+redis                               latest        0378d73bea8b   3 months ago   128MB
+nginx                               alpine        d6adbc7fd47e   3 months ago   52.4MB
+postgres                            latest        8663c6099632   4 months ago   438MB
+nginx                               1.19-alpine   a64a6e03b055   4 years ago    22.6MB
+rotorocloud/webapp-mysql            latest        8f183a7f22c7   4 years ago    56.6MB
+rotorocloud/simple-webapp-rockets   latest        c8ce52347f19   4 years ago    52.6MB
+
+Задание 4. Мы только что скачали код приложения. Какой базовый образ используется в этом Dockerfile? Проверь Dockerfile в директории webapp-rockets.
+Выполнение:
+cat webapp-rockets/Dockerfile | head -n 1
+Ответ:
+FROM python:3.8
+
+Задание 5. В какое расположение внутри контейнера будет скопирован исходный код во время создания образа? Исследуй Dockerfile в директории webapp-rockets.
+Выполнение:
+cat webapp-rockets/Dockerfile
+Ответ:
+FROM python:3.8
+
+RUN pip install flask
+
+COPY . /opt/
+
+EXPOSE 8080
+
+WORKDIR /opt
+
+ENTRYPOINT ["python3", "app.py"]
+
+Задание 6. Когда контейнер создан с помощью образа, собранного из этого Dockerfile, какая команда используется для запуска приложения внутри него? Исследуй Dockerfile в директории webapp-rockets.
+Выполнение:
+cat webapp-rockets/Dockerfile
+Ответ:
+FROM python:3.8
+
+RUN pip install flask
+
+COPY . /opt/
+
+EXPOSE 8080
+
+WORKDIR /opt
+
+ENTRYPOINT ["python3", "app.py"]
+
+Задание 7. Какой port у приложения внутри контейнера? Исследуй Dockerfile в директории webapp-rockets.
+Выполнение:
+cat webapp-rockets/Dockerfile
+Ответ:
+FROM python:3.8
+
+RUN pip install flask
+
+COPY . /opt/
+
+EXPOSE 8080
+
+WORKDIR /opt
+
+ENTRYPOINT ["python3", "app.py"]
+
+Задание 8. Создай докер-образ используя этот Dockerfile и назови его webapp-rockets. Не присваивай никаких тегов.
+Выполнение:
+docker build -t webapp-rockets .
+Ответ:
+[+] Building 702.6s (9/9) FINISHED                                                                                                                                    docker:default
+ => [internal] load build definition from Dockerfile                                                                                                                            7.1s
+ => => transferring dockerfile: 151B                                                                                                                                            0.1s
+ => [internal] load metadata for docker.io/library/python:3.8                                                                                                                   8.9s
+ => [internal] load .dockerignore                                                                                                                                               0.1s
+ => => transferring context: 2B                                                                                                                                                 0.0s
+ => [1/4] FROM docker.io/library/python:3.8@sha256:d411270700143fa2683cc8264d9fa5d3279fd3b6afff62ae81ea2f9d070e390c                                                           623.7s
+ => => resolve docker.io/library/python:3.8@sha256:d411270700143fa2683cc8264d9fa5d3279fd3b6afff62ae81ea2f9d070e390c                                                             0.1s
+ => => sha256:d411270700143fa2683cc8264d9fa5d3279fd3b6afff62ae81ea2f9d070e390c 10.35kB / 10.35kB                                                                                0.0s
+ => => sha256:3ea6eaad4f175bd42f39dae10098b1820ee522628ff04670b3ac8b89fe00c1c8 5.97kB / 5.97kB                                                                                  0.0s
+ => => sha256:7aa279fb41dad2962d3c915aa6f6615134baa412ab5aafa9d4384dcaaa0af15d 2.32kB / 2.32kB                                                                                  0.0s
+ => => sha256:cdd62bf39133c498a16f7a7b1b6555ba43d02b2511c508fa4c0a9b1975ffe20e 49.56MB / 49.56MB                                                                                8.8s
+ => => sha256:a47cff7f31e941e78bf63ca19f0811b675283e2c00ddea10c57f78d93b2bc343 24.05MB / 24.05MB                                                                                4.3s
+ => => sha256:a173f2aee8e962ea19db1e418ae84a0c9f71480b51f768a19332dfa83d7722a5 64.39MB / 64.39MB                                                                               47.8s
+ => => sha256:01272fe8adbacc44afd2b92994b31c40a151f4324ca392050d9e8d580927dd32 211.27MB / 211.27MB                                                                             92.8s
+ => => sha256:cddc73e4e6c704bfa2325e53c32ddb3553c8fc3a91dab6c092bb353f82098b09 6.16MB / 6.16MB                                                                                 14.5s
+ => => extracting sha256:cdd62bf39133c498a16f7a7b1b6555ba43d02b2511c508fa4c0a9b1975ffe20e                                                                                     133.2s
+ => => sha256:cc48f13b5f0f44b2e298de83a94a99fe7abdfb3335fe9b7811b8f764abb1a4ac 18.06MB / 18.06MB                                                                               30.5s
+ => => sha256:5a98c896c047f960c5fd29d44fa778899a68e7ebfb6a6a4f2a3fbf7baa902f6a 249B / 249B                                                                                     63.0s
+ => => extracting sha256:a47cff7f31e941e78bf63ca19f0811b675283e2c00ddea10c57f78d93b2bc343                                                                                      56.3s
+ => => extracting sha256:a173f2aee8e962ea19db1e418ae84a0c9f71480b51f768a19332dfa83d7722a5                                                                                     103.8s
+ => => extracting sha256:01272fe8adbacc44afd2b92994b31c40a151f4324ca392050d9e8d580927dd32                                                                                     191.3s
+ => => extracting sha256:cddc73e4e6c704bfa2325e53c32ddb3553c8fc3a91dab6c092bb353f82098b09                                                                                       2.8s
+ => => extracting sha256:cc48f13b5f0f44b2e298de83a94a99fe7abdfb3335fe9b7811b8f764abb1a4ac                                                                                       8.8s
+ => => extracting sha256:5a98c896c047f960c5fd29d44fa778899a68e7ebfb6a6a4f2a3fbf7baa902f6a                                                                                       0.1s
+ => [internal] load build context                                                                                                                                               0.6s
+ => => transferring context: 1.18MB                                                                                                                                             0.4s
+ => [2/4] RUN pip install flask                                                                                                                                                19.0s
+ => [3/4] COPY . /opt/                                                                                                                                                          0.5s 
+ => [4/4] WORKDIR /opt                                                                                                                                                          0.4s 
+ => exporting to image                                                                                                                                                         42.2s 
+ => => exporting layers                                                                                                                                                        42.1s 
+ => => writing image sha256:77360c78af5f71cf21ac559bf15c0786e48cb4ecae9e596295eed6e89df771c1                                                                                    0.0s 
+ => => naming to docker.io/library/webapp-rockets                                                                                                                               0.0s
+
+Задание 9. Запусти экземпляр образа webapp-rockets и опубликуй порт 8080 контейнера на 30082 порту докер-хоста.
+Выполнение:
+docker run -d -p 30082:8080 --name rockets-container webapp-rockets
+Ответ:
+CONTAINER ID   IMAGE            COMMAND            CREATED          STATUS          PORTS                                         NAMES
+4fa657aa7fa6   webapp-rockets   "python3 app.py"   24 seconds ago   Up 22 seconds   0.0.0.0:30082->8080/tcp, :::30082->8080/tcp   rockets-container
+
+Задание 10. Открой веб-приложение используя вкладку HOST:30082 над вопросами. Если нужно, ты можешь остановить работающий контейнер с помощью комбинации CTRL + C или командой docker stop $(docker ps -q --filter ancestor=webapp-rockets).
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 11. Какая базовая ОС использована в образе python:3.8? Если потребуется, ты всегда можешь запустить экземпляр контейнера из такого образа.
+Выполнение:
+docker pull python:3.8
+docker run -it --rm python:3.8 cat /etc/os-release
+Ответ:
+PRETTY_NAME="Debian GNU/Linux 12 (bookworm)"
+NAME="Debian GNU/Linux"
+VERSION_ID="12"
+VERSION="12 (bookworm)"
+VERSION_CODENAME=bookworm
+ID=debian
+HOME_URL="https://www.debian.org/"
+SUPPORT_URL="https://www.debian.org/support"
+BUG_REPORT_URL="https://bugs.debian.org/"
+
+Задание 12. Какой примерный размер образа webapp-rockets?
+Выполнение:
+docker images webapp-rockets
+Ответ:
+REPOSITORY       TAG       IMAGE ID       CREATED         SIZE
+webapp-rockets   latest    77360c78af5f   7 minutes ago   1.01GB
+
+Задание 13. Это действительно большой размер для образа. Докер-образы предполагаются как маленькие и легковесные. Давай немного обрежем его.
+Выполнение:
+Отсутствует. Просто уведомление.
+Ответ:
+Отсутствует. Просто уведомление.
+
+Задание 14. Создай новый образ этого приложения, который будет поменьше. Измени старый Dockerfile, назови образ webapp-rockets, дай ему тег lite. Подсказка: Поищи базовый образ для python:3.8 поменьше. Убедись, что размер готового образа будет меньше чем 150MB.
+Выполнение:
+nano Dockerfile
+docker build -t webapp-rockets:lite .
+Ответ:
+[+] Building 55.5s (9/9) FINISHED                                                                                                                                     docker:default
+ => [internal] load build definition from Dockerfile                                                                                                                            0.1s
+ => => transferring dockerfile: 158B                                                                                                                                            0.1s
+ => [internal] load metadata for docker.io/library/python:3.8-alpine                                                                                                            2.2s
+ => [internal] load .dockerignore                                                                                                                                               0.1s
+ => => transferring context: 2B                                                                                                                                                 0.1s
+ => [internal] load build context                                                                                                                                               0.1s
+ => => transferring context: 2.19kB                                                                                                                                             0.1s
+ => [1/4] FROM docker.io/library/python:3.8-alpine@sha256:3d93b1f77efce339aa77db726656872517b0d67837989aa7c4b35bd5ae7e81ba                                                     19.5s
+ => => resolve docker.io/library/python:3.8-alpine@sha256:3d93b1f77efce339aa77db726656872517b0d67837989aa7c4b35bd5ae7e81ba                                                      0.1s
+ => => sha256:3d93b1f77efce339aa77db726656872517b0d67837989aa7c4b35bd5ae7e81ba 10.29kB / 10.29kB                                                                                0.0s
+ => => sha256:9f956f4ecf00137962b8da05d2ced2181cf22e23036a81daa61610e16ddd1078 1.73kB / 1.73kB                                                                                  0.0s
+ => => sha256:cd39247b02f92df84605637e0f1b7887434169aca105b8ee9cbcd2dbfc988ed5 4.95kB / 4.95kB                                                                                  0.0s
+ => => sha256:43c4264eed91be63b206e17d93e75256a6097070ce643c5e8f0379998b44f170 3.62MB / 3.62MB                                                                                  0.5s
+ => => sha256:bbd039b2f2dc0cbe5a1fb925d1006dc58892cd76b385af7243c1d668d7ce2491 455.12kB / 455.12kB                                                                              0.6s
+ => => sha256:2fe9ed713579c200eb3576e25f4604247c6b5d36482a5bb477de3c8339274f0f 14.22MB / 14.22MB                                                                                2.3s
+ => => sha256:86e037ebf8b67184256b8126401150c6d34e6d9977b5f320cb4a52e91e31fc41 247B / 247B                                                                                      0.9s
+ => => extracting sha256:43c4264eed91be63b206e17d93e75256a6097070ce643c5e8f0379998b44f170                                                                                       2.7s
+ => => extracting sha256:bbd039b2f2dc0cbe5a1fb925d1006dc58892cd76b385af7243c1d668d7ce2491                                                                                       3.2s
+ => => extracting sha256:2fe9ed713579c200eb3576e25f4604247c6b5d36482a5bb477de3c8339274f0f                                                                                      11.6s
+ => => extracting sha256:86e037ebf8b67184256b8126401150c6d34e6d9977b5f320cb4a52e91e31fc41                                                                                       0.1s
+ => [2/4] RUN pip install flask                                                                                                                                                23.7s
+ => [3/4] COPY . /opt/                                                                                                                                                          0.2s 
+ => [4/4] WORKDIR /opt                                                                                                                                                          0.1s 
+ => exporting to image                                                                                                                                                          9.3s 
+ => => exporting layers                                                                                                                                                         9.2s 
+ => => writing image sha256:280d13650b86af069c5f9c201216e108669fefe057f91c5aa88acb075ccc2036                                                                                    0.0s 
+ => => naming to docker.io/library/webapp-rockets:lite                                                                                                                          0.0s
+
+Задание 15. Запусти экземпляр из образа webapp-rockets:lite и опубликуй порт 8080 контейнера на порту 30083 хоста.
+Выполнение:
+docker run -d -p 30083:8080 --name rocket-lite webapp-rockets:lite
+docker ps
+Ответ:
+CONTAINER ID   IMAGE                 COMMAND            CREATED          STATUS          PORTS                                         NAMES
+2e444fd6c2ee   webapp-rockets:lite   "python3 app.py"   20 seconds ago   Up 18 seconds   0.0.0.0:30083->8080/tcp, :::30083->8080/tcp   rocket-lite
